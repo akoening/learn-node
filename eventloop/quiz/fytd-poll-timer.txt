@@ -1,3 +1,11 @@
 - Explain the order of execution in terms of the event loop for eventloop/poll_timer.js.
+
+After the main thread executes, the event loop is in poll, so the file read is scheduled for a worker thread. The file will be read
+and the corresponding callback will be put into pending callbacks. When poll is idle, pending callbacks take precedence.
 - Will the order of execution change if the delay in the while loop is changed from 10s to 150s? Why or why not?
+No, because the I/O execution happens so quickly.
 - Will the order of execution change if timeout is changed to 0? Why or why not?
+Probably, because the I/O execution probably won't finish before the timer callback is ready.
+Callback is scheduled in the event loop as it should be (as a callback).
+First, event loop is in the poll stage and does read file, then the callabacks are executed. 
+I/O events always have priority, then check, then timer. So timer is executed after I/O. 

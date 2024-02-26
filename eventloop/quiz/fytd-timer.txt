@@ -1,1 +1,8 @@
 - In eventloop/timer.js, what will be the order of execution? Briefly explain the order of execution w.r.t the event loop phases.
+
+Because of the timeout function, the console logs foo and baz before any bar messages. 
+Foo is the first function called, then it calls bar with setTimeout, then it calls baz. 
+So we see foo baz foo baz 2:bar 1:bar in the console because foo is first called with 2, then 1. 
+Bar becomes an asynchronous function or callback that is only executed at the end of the program.
+Setting the delay to 0 moves the function from the timer queue to the callback queue right away.
+There is no need to wait on poll because there is no I/O. 

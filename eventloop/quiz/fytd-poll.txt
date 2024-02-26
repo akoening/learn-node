@@ -1,1 +1,7 @@
 - In eventloop/poll.js, what will be the order of execution? Briefly explain the order of execution w.r.t the event loop phases.
+
+Even though someAsyncOperation is called first, its output is logged last in the console.
+This is because it contains an I/O operation (reading from a file), which pushes it to the poll phase.
+Then since poll doesn't have its own queue, once the file read is complete (performed by worker thread), it gets pushed to the pending callbacks queue.
+This queue is cleared/executed once the main feed execution is complete, so we get the Read Error last.
+

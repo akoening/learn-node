@@ -1,2 +1,9 @@
 - Explain the order of execution in terms of the event loop for eventloop/immediate.js.
+File read is put in poll phase and then put in callback. After 5 ms, the setTimeout call is moved from the timer queue to the callback queue.
+SetImmediate is also an asynchronous function and goes to the check phase. The loop iterates again, and prioritizes check over timer events. 
+Therefore we see the file data logged in the console first, then the text from setImmediate, then setTimeout. 
 - Will the order of execution change if timeout is changed to 0? Why or why not?
+No, because of the order of events in the event loop. 
+Moving setImmediate to before or after the readfile lines in the code will have the effect of printing its output to the console first. 
+This is because it gets moved to the check queue, which will be completed/called before the pending callbacks queue, which is where the callback
+from the I/O waits after the poll phase. The file has to be processed within the callback.
